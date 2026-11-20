@@ -1,0 +1,19 @@
+package com.carebridge.doctor.enums;
+
+public enum DoctorSpecialization {
+
+    GENERAL_PHYSICIAN,
+    CARDIOLOGIST,
+    DERMATOLOGIST,
+    NEUROLOGIST,
+    ORTHOPEDIC,
+    PEDIATRICIAN,
+    GYNECOLOGIST,
+    DENTIST,
+    OPHTHALMOLOGIST,
+    PSYCHIATRIST,
+    ENT_SPECIALIST,
+    UROLOGIST,
+    ONCOLOGIST,
+    OTHER
+}

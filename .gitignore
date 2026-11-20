@@ -1,0 +1,37 @@
+# IDE
+.idea/
+.vscode/
+.settings/
+*.iml
+.classpath
+.project
+
+# Java / Maven
+target/
+*.class
+*.jar
+*.war
+
+# React / Node
+frontend/node_modules/
+frontend/dist/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+
+# Local configuration containing secrets
+application-local.properties
+application-prod-secrets.properties
+
+# Backup
+CareBridge_Backup_*/
+
+# Operating System
+.DS_Store
+Thumbs.db

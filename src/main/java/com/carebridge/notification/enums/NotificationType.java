@@ -1,0 +1,18 @@
+package com.carebridge.notification.enums;
+
+public enum NotificationType {
+
+    APPOINTMENT_CONFIRMED,
+    APPOINTMENT_REJECTED,
+    APPOINTMENT_CANCELLED,
+    APPOINTMENT_UPCOMING,
+
+    LAB_REPORT_AVAILABLE,
+
+    PRESCRIPTION_ISSUED,
+
+    LOW_STOCK,
+    MEDICINE_EXPIRY,
+
+    GENERAL
+}
