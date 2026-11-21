@@ -35,3 +35,9 @@ CareBridge_Backup_*/
 # Operating System
 .DS_Store
 Thumbs.db
+
+# Local database backup
+carebridge_db_backup.sql
+
+# Database SSL certificate
+ca.pem
