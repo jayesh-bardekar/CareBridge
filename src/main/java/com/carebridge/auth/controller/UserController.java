@@ -13,6 +13,11 @@ import com.carebridge.audit.service.AuditLogService;
 import com.carebridge.auth.dto.UserResponse;
 import com.carebridge.auth.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import com.carebridge.auth.dto.UserRoleUpdateRequest;
 
 @RestController
 @RequestMapping("/api/users")
@@ -39,16 +44,15 @@ public class UserController {
 		// Record-level authorization
 		if (!isAdmin && !loggedInEmail.equalsIgnoreCase(email)) {
 
-		    // Record unauthorized access attempt
-		    auditLogService.logActivity(
-		            loggedInEmail,
-		            AuditAction.ACCESS_DENIED,
-		            "Unauthorized profile access attempt",
-		            httpRequest.getRemoteAddr()
-		    );
+			// Record unauthorized access attempt
+			auditLogService.logActivity(
+					loggedInEmail,
+					AuditAction.ACCESS_DENIED,
+					"Unauthorized profile access attempt",
+					httpRequest.getRemoteAddr());
 
-		    throw new AccessDeniedException(
-		            "You are not authorized to access this user's profile");
+			throw new AccessDeniedException(
+					"You are not authorized to access this user's profile");
 		}
 
 		Optional<UserResponse> user = userService.getUserByEmail(email);
@@ -62,5 +66,25 @@ public class UserController {
 				httpRequest.getRemoteAddr());
 
 		return ResponseEntity.ok(user.get());
+	}
+
+	@PutMapping("/{email}/role")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<UserResponse> updateUserRole(
+			@PathVariable String email,
+			@RequestBody UserRoleUpdateRequest request,
+			Authentication authentication,
+			HttpServletRequest httpRequest) {
+
+		UserResponse updatedUser = userService.updateUserRole(
+				email, request.getRole());
+
+		auditLogService.logActivity(
+				authentication.getName(),
+				AuditAction.PROFILE_ACCESSED,
+				"User role updated to " + request.getRole(),
+				httpRequest.getRemoteAddr());
+
+		return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
 	}
 }

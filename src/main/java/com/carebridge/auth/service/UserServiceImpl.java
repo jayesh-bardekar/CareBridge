@@ -9,6 +9,7 @@ import com.carebridge.auth.entity.User;
 import com.carebridge.auth.enums.UserRole;
 import com.carebridge.auth.repository.UserRepository;
 import com.carebridge.common.exception.EmailAlreadyExistsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -37,11 +38,21 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public UserResponse updateUserRole(String email, String role) {
+
+		User user = userRepository.findByEmail(email)
+				.orElseThrow(() -> new IllegalArgumentException("User not found"));
+		user.setRole(UserRole.valueOf(role.toUpperCase()));
+
+		return convertToResponse(userRepository.save(user));
+	}
+
+	@Override
 	public UserResponse registerUser(UserRegistrationRequest request) {
 
 		// Check whether email already exists
 		if (userRepository.existsByEmail(request.getEmail())) {
-		    throw new EmailAlreadyExistsException("Email is already registered");
+			throw new EmailAlreadyExistsException("Email is already registered");
 		}
 
 		// Create new user
@@ -64,6 +75,23 @@ public class UserServiceImpl implements UserService {
 		User savedUser = userRepository.save(user);
 
 		return convertToResponse(savedUser);
+	}
+
+	@Override
+	public UserResponse updateUserRole(String email, UserRole role) {
+
+		if (role == null || role == UserRole.ADMIN) {
+			throw new IllegalArgumentException("Invalid role assignment");
+		}
+
+		User user = userRepository.findByEmail(email)
+				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+		user.setRole(role);
+
+		User updatedUser = userRepository.save(user);
+
+		return convertToResponse(updatedUser);
 	}
 
 	// Convert User entity into UserResponse DTO

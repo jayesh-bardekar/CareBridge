@@ -15,9 +15,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.carebridge.security.JwtAccessDeniedHandler;
 import com.carebridge.security.JwtAuthenticationEntryPoint;
 import com.carebridge.security.JwtAuthenticationFilter;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -261,6 +263,7 @@ public class SecurityConfig {
 						// REMAINING APIs
 						// =================================
 
+						.requestMatchers(HttpMethod.PUT, "/api/users/*/role").hasRole("ADMIN")
 						.anyRequest().authenticated())
 
 				// =================================
