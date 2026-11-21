@@ -44,8 +44,10 @@ public class SecurityConfig {
 		CorsConfiguration configuration = new CorsConfiguration();
 
 		// Allowed frontend origin
-		configuration.setAllowedOriginPatterns(
-				List.of("http://localhost:5173", "https://*.vercel.app"));
+		configuration.setAllowedOrigins(
+				List.of(
+						"http://localhost:5173",
+						"https://care-bridge-psi.vercel.app"));
 
 		// Allowed HTTP methods
 		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
